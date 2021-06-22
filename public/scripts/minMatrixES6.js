@@ -118,8 +118,8 @@ export default function matIV() {
   };
   this.lookAt = function(eye, center, up, dest) {
     const eyeX    = eye[0],    eyeY    = eye[1],    eyeZ    = eye[2],
-    upX     = up[0],     upY     = up[1],     upZ     = up[2],
-    centerX = center[0], centerY = center[1], centerZ = center[2];
+          upX     = up[0],     upY     = up[1],     upZ     = up[2],
+          centerX = center[0], centerY = center[1], centerZ = center[2];
     if (eyeX == centerX && eyeY == centerY && eyeZ == centerZ) { return this.identity(dest); }
     let x0, x1, x2, y0, y1, y2, z0, z1, z2, l;
     z0 = eyeX - center[0]; z1 = eyeY - center[1]; z2 = eyeZ - center[2];
