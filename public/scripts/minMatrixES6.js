@@ -187,16 +187,16 @@ export default function matIV() {
   };
   this.inverse = function(mat, dest) {
     const a = mat[0],  b = mat[1],  c = mat[2],  d = mat[3],
-    e = mat[4],  f = mat[5],  g = mat[6],  h = mat[7],
-    i = mat[8],  j = mat[9],  k = mat[10], l = mat[11],
-    m = mat[12], n = mat[13], o = mat[14], p = mat[15],
-    q = a * f - b * e, r = a * g - c * e,
-    s = a * h - d * e, t = b * g - c * f,
-    u = b * h - d * f, v = c * h - d * g,
-    w = i * n - j * m, x = i * o - k * m,
-    y = i * p - l * m, z = j * o - k * n,
-    A = j * p - l * n, B = k * p - l * o,
-    ivd = 1 / (q * B - r * A + s * z + t * y - u * x + v * w);
+          e = mat[4],  f = mat[5],  g = mat[6],  h = mat[7],
+          i = mat[8],  j = mat[9],  k = mat[10], l = mat[11],
+          m = mat[12], n = mat[13], o = mat[14], p = mat[15],
+          q = a * f - b * e, r = a * g - c * e,
+          s = a * h - d * e, t = b * g - c * f,
+          u = b * h - d * f, v = c * h - d * g,
+          w = i * n - j * m, x = i * o - k * m,
+          y = i * p - l * m, z = j * o - k * n,
+          A = j * p - l * n, B = k * p - l * o,
+          ivd = 1 / (q * B - r * A + s * z + t * y - u * x + v * w);
     dest[0]  = ( f * B - g * A + h * z) * ivd;
     dest[1]  = (-b * B + c * A - d * z) * ivd;
     dest[2]  = ( n * v - o * u + p * t) * ivd;
