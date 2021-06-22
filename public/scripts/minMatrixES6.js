@@ -22,13 +22,13 @@ export default function matIV() {
   };
   this.multiply = function(mat1, mat2, dest) {
     const a = mat1[0],  b = mat1[1],  c = mat1[2],  d = mat1[3],
-    e = mat1[4],  f = mat1[5],  g = mat1[6],  h = mat1[7],
-    i = mat1[8],  j = mat1[9],  k = mat1[10], l = mat1[11],
-    m = mat1[12], n = mat1[13], o = mat1[14], p = mat1[15],
-    A = mat2[0],  B = mat2[1],  C = mat2[2],  D = mat2[3],
-    E = mat2[4],  F = mat2[5],  G = mat2[6],  H = mat2[7],
-    I = mat2[8],  J = mat2[9],  K = mat2[10], L = mat2[11],
-    M = mat2[12], N = mat2[13], O = mat2[14], P = mat2[15];
+          e = mat1[4],  f = mat1[5],  g = mat1[6],  h = mat1[7],
+          i = mat1[8],  j = mat1[9],  k = mat1[10], l = mat1[11],
+          m = mat1[12], n = mat1[13], o = mat1[14], p = mat1[15],
+          A = mat2[0],  B = mat2[1],  C = mat2[2],  D = mat2[3],
+          E = mat2[4],  F = mat2[5],  G = mat2[6],  H = mat2[7],
+          I = mat2[8],  J = mat2[9],  K = mat2[10], L = mat2[11],
+          M = mat2[12], N = mat2[13], O = mat2[14], P = mat2[15];
     dest[0] = A * a + B * e + C * i + D * m;
     dest[1] = A * b + B * f + C * j + D * n;
     dest[2] = A * c + B * g + C * k + D * o;
