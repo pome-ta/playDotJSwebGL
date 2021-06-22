@@ -82,39 +82,39 @@ export default function matIV() {
     const a = axis[0], b = axis[1], c = axis[2];
     if (sq != 1) { sq = 1 / sq; a *= sq; b *= sq; c *= sq; }
     const d = Math.sin(angle), e = Math.cos(angle), f = 1 - e,
-        g = mat[0],  h = mat[1], i = mat[2],  j = mat[3],
-        k = mat[4],  l = mat[5], m = mat[6],  n = mat[7],
-        o = mat[8],  p = mat[9], q = mat[10], r = mat[11],
-        s = a * a * f + e,
-        t = b * a * f + c * d,
-        u = c * a * f - b * d,
-        v = a * b * f - c * d,
-        w = b * b * f + e,
-        x = c * b * f + a * d,
-        y = a * c * f + b * d,
-        z = b * c * f - a * d,
-        A = c * c * f + e;
-        if (angle) {
-          if (mat != dest) {
-            dest[12] = mat[12]; dest[13] = mat[13];
-            dest[14] = mat[14]; dest[15] = mat[15];
-          }
-        } else {
-          dest = mat;
-        }
-        dest[0] = g * s + k * t + o * u;
-        dest[1] = h * s + l * t + p * u;
-        dest[2] = i * s + m * t + q * u;
-        dest[3] = j * s + n * t + r * u;
-        dest[4] = g * v + k * w + o * x;
-        dest[5] = h * v + l * w + p * x;
-        dest[6] = i * v + m * w + q * x;
-        dest[7] = j * v + n * w + r * x;
-        dest[8] = g * y + k * z + o * A;
-        dest[9] = h * y + l * z + p * A;
-        dest[10] = i * y + m * z + q * A;
-        dest[11] = j * y + n * z + r * A;
-        return dest;
+          g = mat[0],  h = mat[1], i = mat[2],  j = mat[3],
+          k = mat[4],  l = mat[5], m = mat[6],  n = mat[7],
+          o = mat[8],  p = mat[9], q = mat[10], r = mat[11],
+          s = a * a * f + e,
+          t = b * a * f + c * d,
+          u = c * a * f - b * d,
+          v = a * b * f - c * d,
+          w = b * b * f + e,
+          x = c * b * f + a * d,
+          y = a * c * f + b * d,
+          z = b * c * f - a * d,
+          A = c * c * f + e;
+    if (angle) {
+      if (mat != dest) {
+        dest[12] = mat[12]; dest[13] = mat[13];
+        dest[14] = mat[14]; dest[15] = mat[15];
+      }
+    } else {
+      dest = mat;
+    }
+    dest[0] = g * s + k * t + o * u;
+    dest[1] = h * s + l * t + p * u;
+    dest[2] = i * s + m * t + q * u;
+    dest[3] = j * s + n * t + r * u;
+    dest[4] = g * v + k * w + o * x;
+    dest[5] = h * v + l * w + p * x;
+    dest[6] = i * v + m * w + q * x;
+    dest[7] = j * v + n * w + r * x;
+    dest[8] = g * y + k * z + o * A;
+    dest[9] = h * y + l * z + p * A;
+    dest[10] = i * y + m * z + q * A;
+    dest[11] = j * y + n * z + r * A;
+    return dest;
   };
   this.lookAt = function(eye, center, up, dest) {
     const eyeX    = eye[0],    eyeY    = eye[1],    eyeZ    = eye[2],
