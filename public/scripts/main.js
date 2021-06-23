@@ -118,31 +118,8 @@ function init() {
     
     // コンテキストの再描画
     gl.flush();
-    
   };
-  /*
-  m.translate(mMatrix, [1.5, 0.0, 0.0], mMatrix);  // 一つ目のモデルを移動するためのモデル座標変換行列
-  m.multiply(tmpMatrix, mMatrix, mvpMatrix);  // モデル×ビュー×プロジェクション(一つ目のモデル)
-
-
   
-  gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);  // uniformLocationへ座標変換行列を登録
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
-  
-  // 二つ目のモデルを移動するためのモデル座標変換行列
-  m.identity(mMatrix);
-  m.translate(mMatrix, [-1.5, 0.0, 0.0], mMatrix);
-  
-  // モデル×ビュー×プロジェクション(二つ目のモデル)
-  m.multiply(tmpMatrix, mMatrix, mvpMatrix);
-
-  // uniformLocationへ座標変換行列を登録し描画する(二つ目のモデル)
-  gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
-  gl.flush();  // コンテキストの再描画
-  */
-  
-
   /* シェーダを生成・コンパイルする関数 */
   function create_shader(id) {
     let shader;  // シェーダを格納する変数
@@ -165,7 +142,6 @@ function init() {
     gl.compileShader(shader);  // シェーダをコンパイル
     // シェーダが正しくコンパイルされたかチェック
     if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      //console.log({shader});
       return shader;  // 成功していたらシェーダを返し終了
     } else {
       alert(gl.getShaderInfoLog(shader));  // 失敗していたらエラーログをアラート
@@ -183,7 +159,6 @@ function init() {
     // シェーダのリンクが正しく行なわれたかチェック
     if (gl.getProgramParameter(program, gl.LINK_STATUS)) {
       gl.useProgram(program);  // 成功していたらプログラムオブジェクトを有効
-      //console.log({program});
       return program;  // プログラムオブジェクトを返して終了
     } else {
       alert(gl.getProgramInfoLog(program));  // 失敗していたらエラーログをアラート
