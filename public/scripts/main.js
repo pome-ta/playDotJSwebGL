@@ -42,7 +42,6 @@ function init() {
      1.0, 0.0, 0.0,
     -1.0, 0.0, 0.0
   ];
-  
   // 頂点の色情報を格納する配列
   const color = [
     1.0, 0.0, 0.0, 1.0,
@@ -51,21 +50,12 @@ function init() {
   ];
   
   // VBOの生成
-  const position_vbo = create_vbo(position);
-  const color_vbo = create_vbo(color);
+  const pos_vbo = create_vbo(position);
+  const col_vbo = create_vbo(color);
   
-  //set_attribute([pos_vbo, col_vbo], attLocation, attStride);  // VBO を登録する
+  set_attribute([pos_vbo, col_vbo], attLocation, attStride);  // VBO を登録する
   const uniLocation = gl.getUniformLocation(prg, 'mvpMatrix');  // uniformLocationの取得
 
-  // VBOをバインドし登録する(位置情報)
-  gl.bindBuffer(gl.ARRAY_BUFFER, position_vbo);
-  gl.enableVertexAttribArray(attLocation[0]);
-  gl.vertexAttribPointer(attLocation[0], attStride[0], gl.FLOAT, false, 0, 0);
-  
-  // VBOをバインドし登録する(色情報)
-  gl.bindBuffer(gl.ARRAY_BUFFER, color_vbo);
-  gl.enableVertexAttribArray(attLocation[1]);
-  gl.vertexAttribPointer(attLocation[1], attStride[1], gl.FLOAT, false, 0, 0);
   
   /* minMatrix.js を用いた行列関連処理 */
   const m = new matIV();  // matIVオブジェクトを生成
@@ -163,6 +153,15 @@ function init() {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);  // バッファにデータをセット
     gl.bindBuffer(gl.ARRAY_BUFFER, null);  // バッファのバインドを無効化
     return vbo;  // 生成した VBO を返して終了
+  }
+  
+  /* VBOをバインドし登録する関数 */
+  function set_attribute(vbo, attL, attS) {
+    for (let i in vbo) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, vbo[i]);  // バッファをバインドする
+      gl.enableVertexAttribArray(attL[i]);  // attributeLocationを有効にする
+      gl.vertexAttribPointer(attL[i], attS[i], gl.FLOAT, false, 0, 0);  // attributeLocationを通知し登録する
+    }
   }
 }
 
