@@ -13,18 +13,13 @@ function init() {
   c.height = height;
   
   const gl = c.getContext('webgl');  // webglコンテキスト取得
-  // canvasを黒でクリア(初期化)
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
   
-  gl.clearDepth(1.0);  // canvasを初期化する際の深度を設定
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);  // canvasを初期化
   // 頂点シェーダとフラグメントシェーダの生成
   const v_shader = create_shader('vs');
   const f_shader = create_shader('fs');
   
-  // プログラムオブジェクトの生成とリンク
-  const prg = create_program(v_shader, f_shader);
+  
+  const prg = create_program(v_shader, f_shader);  // プログラムオブジェクトの生成とリンク
   // attributeLocationを配列に取得
   const attLocation = new Array(2);
   attLocation[0] = gl.getAttribLocation(prg, 'position');
@@ -67,17 +62,65 @@ function init() {
   const mvpMatrix = m.identity(m.create());
   
   /* ビュー×プロジェクション座標変換行列 */
-  m.lookAt([0.0, 0.0, 3.0],
+  m.lookAt([0.0, 0.0, 5.0],
            [0.0, 0.0, 0.0],
            [0.0, 1.0, 0.0],
            vMatrix);
-  m.perspective(90,
+  m.perspective(45,
                 c.width / c.height,
                 0.1,
                 100,
                 pMatrix);
   m.multiply(pMatrix, vMatrix, tmpMatrix);
   
+  let count = 0;
+  loop();
+  function loop() {
+    requestAnimationFrame(loop);
+    // canvas 初期化
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearDepth(1.0);  // canvasを初期化する際の深度を設定
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    count++;
+    
+    let rad = (count % 360) * Math.PI / 180;
+    // モデル1は円の軌道を描き移動する
+    let x = Math.cos(rad);
+    let y = Math.sin(rad);
+    m.identity(mMatrix);
+    m.translate(mMatrix, [x, y + 1.0, 0.0], mMatrix);
+    
+    // モデル1の座標変換行列を完成させレンダリングする
+    m.multiply(tmpMatrix, mMatrix, mvpMatrix);
+    gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    
+    // モデル2はY軸を中心に回転する
+    m.identity(mMatrix);
+    m.translate(mMatrix, [1.0, -1.0, 0.0], mMatrix);
+    m.rotate(mMatrix, rad, [0, 1, 0], mMatrix);
+    
+    // モデル2の座標変換行列を完成させレンダリングする
+    m.multiply(tmpMatrix, mMatrix, mvpMatrix);
+    gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    
+    // モデル3は拡大縮小する
+    let s = Math.sin(rad) + 1.0;
+    m.identity(mMatrix);
+    m.translate(mMatrix, [-1.0, -1.0, 0.0], mMatrix);
+    m.scale(mMatrix, [s, s, 0.0], mMatrix)
+    
+    // モデル3の座標変換行列を完成させレンダリングする
+    m.multiply(tmpMatrix, mMatrix, mvpMatrix);
+    gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    
+    // コンテキストの再描画
+    gl.flush();
+    
+  };
+  /*
   m.translate(mMatrix, [1.5, 0.0, 0.0], mMatrix);  // 一つ目のモデルを移動するためのモデル座標変換行列
   m.multiply(tmpMatrix, mMatrix, mvpMatrix);  // モデル×ビュー×プロジェクション(一つ目のモデル)
 
@@ -97,6 +140,7 @@ function init() {
   gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
   gl.flush();  // コンテキストの再描画
+  */
   
 
   /* シェーダを生成・コンパイルする関数 */
