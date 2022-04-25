@@ -84,7 +84,7 @@ function init() {
 
     count++;
     // count からラジアンを算出
-    const rad = ((count % 360) * Math.PI) / 180;
+    const rad = (count % 360) * Math.PI / 180;
 
     // モデル座標変換行列の生成
     m.identity(mMatrix);
