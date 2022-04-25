@@ -67,13 +67,12 @@ function init() {
   m.perspective(45, c.width / c.height, 0.1, 100, pMatrix);
   m.multiply(pMatrix, vMatrix, tmpMatrix);
 
-  let count = 0;
-
   // カリングと深度テストを有効
   gl.enable(gl.DEPTH_TEST);
   gl.depthFunc(gl.LEQUAL);
   gl.enable(gl.CULL_FACE);
-
+  
+  let count = 0;
   loop();
   function loop() {
     requestAnimationFrame(loop);
@@ -102,7 +101,7 @@ function init() {
     let shader;
 
     // HTMLからscriptタグへの参照を取得
-    const scriptElement = document.getElementById(id);
+    const scriptElement = document.querySelector(`#${id}`);
     // scriptタグが存在しない場合は抜ける
     if (!scriptElement) {
       return;
@@ -128,7 +127,7 @@ function init() {
     if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
       return shader;
     } else {
-      alert(gl.getShaderInfoLog(shader));
+      console.log(gl.getShaderInfoLog(shader));
     }
   }
 
@@ -240,3 +239,4 @@ function init() {
     return color;
   }
 }
+
