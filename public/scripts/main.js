@@ -7,11 +7,6 @@ function init() {
   const width = document.querySelector('.wrap').clientWidth;
   const height = width * 0.8;
 
-  // チェックボックスたち
-  const che_culling = document.querySelector('#cull');
-  const che_front = document.querySelector('#front');
-  const che_depth_test = document.querySelector('#depth');
-
   const c = document.querySelector('#myCanvas');
   c.width = width;
   c.height = height;
@@ -37,34 +32,22 @@ function init() {
   attStride[0] = 3;
   // color 情報
   attStride[1] = 4;
+  
+  // トーラスの頂点データを生成
+  const torusData = torus(32, 32, 1.0, 2.0);
+  const position = torusData[0];
+  const color = torusData[1];
+  const index = torusData[2];
 
-  // 頂点の位置情報を格納する配列
-  const position = [
-    // x,   y,   z,
-     0.0,  1.0,  0.0,
-     1.0,  0.0,  0.0,
-    -1.0,  0.0,  0.0,
-     0.0, -1.0,  0.0,
-  ];
-  // 頂点の色情報を格納する配列
-  const color = [
-    1.0, 0.0, 0.0, 1.0,
-    0.0, 1.0, 0.0, 1.0,
-    0.0, 0.0, 1.0, 1.0,
-    1.0, 1.0, 1.0, 1.0,
-  ];
-  // 頂点のインデックスを格納する配列
-  const index = [0, 1, 2, 1, 2, 3];
-
-  // VBOの生成
+  // VBO の生成
   const pos_vbo = create_vbo(position);
   const col_vbo = create_vbo(color);
-  // VBO を登録する
+  // VBO を登録
   set_attribute([pos_vbo, col_vbo], attLocation, attStride);
 
   // IBOの生成
   const ibo = create_ibo(index);
-  // IBOをバインドして登録する
+  // IBO をバインドして登録
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
   // uniformLocationの取得
   const uniLocation = gl.getUniformLocation(prg, 'mvpMatrix');
@@ -80,35 +63,20 @@ function init() {
   const mvpMatrix = m.identity(m.create());
 
   // ビュー × プロジェクション座標変換行列
-  m.lookAt([0.0, 0.0, 5.0], [0.0, 0.0, 0.0], [0.0, 1.0, 0.0], vMatrix);
+  m.lookAt([0.0, 0.0, 20.0], [0.0, 0.0, 0.0], [0.0, 1.0, 0.0], vMatrix);
   m.perspective(45, c.width / c.height, 0.1, 100, pMatrix);
   m.multiply(pMatrix, vMatrix, tmpMatrix);
 
   let count = 0;
 
-  // 深度テストの比較方法を指定
+  // カリングと深度テストを有効
+  gl.enable(gl.DEPTH_TEST);
   gl.depthFunc(gl.LEQUAL);
+  gl.enable(gl.CULL_FACE);
 
   loop();
   function loop() {
     requestAnimationFrame(loop);
-
-    if (che_culling.checked) {
-      gl.enable(gl.CULL_FACE);
-    } else {
-      gl.disable(gl.CULL_FACE);
-    }
-    if (che_front.checked) {
-      gl.frontFace(gl.CCW);
-    } else {
-      gl.frontFace(gl.CW);
-    }
-    if (che_depth_test.checked) {
-      gl.enable(gl.DEPTH_TEST);
-    } else {
-      gl.disable(gl.DEPTH_TEST);
-    }
-
     // canvas 初期化
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clearDepth(1.0);
@@ -117,21 +85,10 @@ function init() {
     count++;
     // count からラジアンを算出
     const rad = ((count % 360) * Math.PI) / 180;
-    const x = Math.cos(rad) * 1.5;
-    const z = Math.sin(rad) * 1.5;
 
-    // モデル座標変換行列の生成(X軸による回転)
+    // モデル座標変換行列の生成
     m.identity(mMatrix);
-    m.translate(mMatrix, [x, 0.0, z], mMatrix);
-    m.rotate(mMatrix, rad, [1, 0, 0], mMatrix);
-    m.multiply(tmpMatrix, mMatrix, mvpMatrix);
-    gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
-    gl.drawElements(gl.TRIANGLES, index.length, gl.UNSIGNED_SHORT, 0);
-
-    // モデル座標変換行列の生成(Y軸による回転)
-    m.identity(mMatrix);
-    m.translate(mMatrix, [-x, 0.0, -z], mMatrix);
-    m.rotate(mMatrix, rad, [0, 1, 0], mMatrix);
+    m.rotate(mMatrix, rad, [0, 1, 1], mMatrix);
     m.multiply(tmpMatrix, mMatrix, mvpMatrix);
     gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
     gl.drawElements(gl.TRIANGLES, index.length, gl.UNSIGNED_SHORT, 0);
@@ -192,7 +149,7 @@ function init() {
 
       return program;
     } else {
-      alert(gl.getProgramInfoLog(program));
+      console.log(gl.getProgramInfoLog(program));
     }
   }
 
@@ -212,14 +169,10 @@ function init() {
     let ibo = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
     // バッファにデータをセット
-    gl.bufferData(
-      gl.ELEMENT_ARRAY_BUFFER,
-      new Int16Array(data),
-      gl.STATIC_DRAW
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Int16Array(data), gl.STATIC_DRAW
     );
     // バッファのバインドを無効化
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-
     return ibo;
   }
 
@@ -232,5 +185,58 @@ function init() {
       // attributeLocationを通知し登録する
       gl.vertexAttribPointer(attL[i], attS[i], gl.FLOAT, false, 0, 0);
     }
+  }
+  
+  function torus(row, column, irad, orad) {
+    const pos = new Array();
+    const col = new Array();
+    const idx = new Array();
+    let r;
+    for(let i = 0; i <= row; i++) {
+      r = Math.PI * 2 / row * i;
+      const rr = Math.cos(r);
+      const ry = Math.sin(r);
+      for(let ii = 0; ii <= column; ii++) {
+        const tr = Math.PI * 2 / column * ii;
+        const tx = (rr * irad + orad) * Math.cos(tr);
+        const ty = ry * irad;
+        const tz = (rr * irad + orad) * Math.sin(tr);
+        pos.push(tx, ty, tz);
+        const tc = hsva(360 / column * ii, 1, 1, 1);
+        col.push(tc[0], tc[1], tc[2], tc[3]);
+      }
+    }
+    for(let i = 0; i < row; i++) {
+      for(let ii = 0; ii < column; ii++) {
+        r = (column + 1) * i + ii;
+        idx.push(r, r + column + 1, r + 1);
+        idx.push(r + column + 1, r + column + 2, r + 1);
+      }
+    }
+    return [pos, col, idx];
+  }
+  
+  // HSVカラー取得用関数
+  function hsva(h, s, v, a) {
+    if(s > 1 || v > 1 || a > 1) {
+      return;
+    }
+    const th = h % 360;
+    const i = Math.floor(th / 60);
+    const f = th / 60 - i;
+    const m = v * (1 - s);
+    const n = v * (1 - s * f);
+    const k = v * (1 - s * (1 - f));
+    const color = new Array();
+    
+    if(!s > 0 && !s < 0) {
+      color.push(v, v, v, a);
+    } else {
+      const r = new Array(v, n, m, m, k, v);
+      const g = new Array(k, v, v, n, m, m);
+      const b = new Array(m, m, k, v, v, n);
+      color.push(r[i], g[i], b[i], a);
+    }
+    return color;
   }
 }
