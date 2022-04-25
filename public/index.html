@@ -1,52 +1,59 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-  <link rel="stylesheet" href="./styles/style.css">
-
-  <script src="https://cdn.jsdelivr.net/npm/eruda@2.4.1/eruda.min.js"></script>
-  <script>eruda.init();</script>
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+  />
+  <link rel="stylesheet" href="./styles/style.css" />
+  <script type="module">
+    import eruda from './scripts/modules/eruda.js';
+    eruda.init();
+    console.log('eruda run');
+  </script>
 
   <script type="module" src="./scripts/main.js"></script>
 
   <script id="vs" type="x-shader/x-vertex">
-attribute vec3 position;
-attribute vec4 color;
-uniform   mat4 mvpMatrix;
-varying   vec4 vColor;
+    attribute vec3 position;
+    attribute vec4 color;
+    uniform   mat4 mvpMatrix;
+    varying   vec4 vColor;
 
-void main(void){
-    vColor = color;
-    gl_Position = mvpMatrix * vec4(position, 1.0);
-}
+    void main(void){
+        vColor = color;
+        gl_Position = mvpMatrix * vec4(position, 1.0);
+    }
   </script>
 
   <script id="fs" type="x-shader/x-fragment">
-precision highp float;
-varying vec4 vColor;
+    precision highp float;
+    varying vec4 vColor;
 
-void main(void){
-    gl_FragColor = vColor;
-}
+    void main(void){
+        gl_FragColor = vColor;
+    }
   </script>
   <title>WebGL</title>
 </head>
+
 <body>
-<div class="wrap">
-  <canvas id="myCanvas"></canvas>
-  <div class="controller">
-  <p>
-    <input id="cull" type="checkbox" />enable culling
-  </p>
-  <p>
-    <input id="front" type="checkbox">frontface (check -> CCW)
-  </p>
-  <p>
-    <input id="depth" type="checkbox">enable depth test
-  </p>
+  <div class="wrap">
+    <canvas id="myCanvas"></canvas>
+    <div class="controller">
+      <p>
+        <input id="cull" type="checkbox" /><label for="cull">enable culling</label>
+      </p>
+      <p>
+        <input id="front" type="checkbox" /><label for="front">frontface (check -> CCW)</label>
+      </p>
+      <p>
+        <input id="depth" type="checkbox" /><label for="depth">enable depth test</label>
+      </p>
+    </div>
   </div>
-</div>
 </body>
+
 </html>
+
