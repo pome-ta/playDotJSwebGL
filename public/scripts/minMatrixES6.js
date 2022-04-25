@@ -77,11 +77,11 @@ export default function matIV() {
     return dest;
   };
   this.rotate = function(mat, angle, axis, dest) {
-    const sq = Math.sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2]);
+    let sq = Math.sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2]);
     if (!sq) { return null; }
-    const a = axis[0], b = axis[1], c = axis[2];
+    let a = axis[0], b = axis[1], c = axis[2];
     if (sq != 1) { sq = 1 / sq; a *= sq; b *= sq; c *= sq; }
-    const d = Math.sin(angle), e = Math.cos(angle), f = 1 - e,
+    let d = Math.sin(angle), e = Math.cos(angle), f = 1 - e,
           g = mat[0],  h = mat[1], i = mat[2],  j = mat[3],
           k = mat[4],  l = mat[5], m = mat[6],  n = mat[7],
           o = mat[8],  p = mat[9], q = mat[10], r = mat[11],
