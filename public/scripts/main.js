@@ -8,9 +8,9 @@ function init() {
   const height = width * 0.8;
 
   // チェックボックスたち
-  const che_culling = document.getElementById('cull');
-  const che_front = document.getElementById('front');
-  const che_depth_test = document.getElementById('depth');
+  const che_culling = document.querySelector('#cull');
+  const che_front = document.querySelector('#front');
+  const che_depth_test = document.querySelector('#depth');
 
   const c = document.querySelector('#myCanvas');
   c.width = width;
