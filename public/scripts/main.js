@@ -5,7 +5,7 @@ window.addEventListener('load', init);
 function init() {
   // 画面サイズからcanvasのサイズを確定
   const width = document.querySelector('.wrap').clientWidth;
-  const height = width * 0.8;
+  const height = width * 1.8;
 
   const c = document.querySelector('#myCanvas');
   c.width = width;
@@ -63,7 +63,7 @@ function init() {
   const mvpMatrix = m.identity(m.create());
 
   // ビュー × プロジェクション座標変換行列
-  m.lookAt([0.0, 0.0, 20.0], [0.0, 0.0, 0.0], [0.0, 1.0, 0.0], vMatrix);
+  m.lookAt([0.0, 0.0, 16.0], [0.0, 0.0, 0.0], [0.0, 1.0, 0.0], vMatrix);
   m.perspective(45, c.width / c.height, 0.1, 100, pMatrix);
   m.multiply(pMatrix, vMatrix, tmpMatrix);
 
@@ -90,7 +90,11 @@ function init() {
     m.rotate(mMatrix, rad, [0, 1, 1], mMatrix);
     m.multiply(tmpMatrix, mMatrix, mvpMatrix);
     gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
-    gl.drawElements(gl.TRIANGLES, index.length, gl.UNSIGNED_SHORT, 0);
+    //gl.drawElements(gl.TRIANGLES, index.length, gl.UNSIGNED_SHORT, 0);
+    //gl.drawElements(gl.POINTS, index.length, gl.UNSIGNED_SHORT, 0);
+    //gl.drawElements(gl.LINE, index.length, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.LINE_STRIP, index.length, gl.UNSIGNED_SHORT, 0);
+    //gl.drawElements(gl.LINE_LOOP, index.length, gl.UNSIGNED_SHORT, 0);
 
     // コンテキストの再描画
     gl.flush();
