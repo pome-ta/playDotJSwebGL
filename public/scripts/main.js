@@ -34,7 +34,7 @@ function init() {
   attStride[1] = 4;
   
   // トーラスの頂点データを生成
-  const torusData = torus(8, 8, 1.0, 2.0);
+  const torusData = torus(16, 16, 1.0, 2.0);
   const position = torusData[0];
   const color = torusData[1];
   const index = torusData[2];
@@ -87,14 +87,15 @@ function init() {
 
     // モデル座標変換行列の生成
     m.identity(mMatrix);
-    m.rotate(mMatrix, rad, [-0.3, 1, 0.8], mMatrix);
+    m.rotate(mMatrix, rad, [-0.3, 1.0, 0.8], mMatrix);
     m.multiply(tmpMatrix, mMatrix, mvpMatrix);
     gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
+    
     //gl.drawElements(gl.TRIANGLES, index.length, gl.UNSIGNED_SHORT, 0);
     //gl.drawElements(gl.POINTS, index.length, gl.UNSIGNED_SHORT, 0);
     //gl.drawElements(gl.LINE, index.length, gl.UNSIGNED_SHORT, 0);
-    gl.drawElements(gl.LINE_STRIP, index.length, gl.UNSIGNED_SHORT, 0);
-    //gl.drawElements(gl.LINE_LOOP, index.length, gl.UNSIGNED_SHORT, 0);
+    //gl.drawElements(gl.LINE_STRIP, index.length, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.LINE_LOOP, index.length, gl.UNSIGNED_SHORT, 0);
 
     // コンテキストの再描画
     gl.flush();
@@ -195,7 +196,7 @@ function init() {
     const min = -1
     const value = Math.random() * (max - min) + min;
     //console.log(value);
-    return value / 10;
+    return value / 1;
   }
   
   
@@ -213,7 +214,7 @@ function init() {
         const tx = (rr * irad + orad) * Math.cos(tr);
         const ty = ry * irad;
         const tz = (rr * irad + orad) * Math.sin(tr);
-        pos.push(tx, ty, tz);
+        pos.push(tx  + rndm(), ty  + rndm(), tz  + rndm());
         const tc = hsva(360 / column * ii, 1, 1, 1);
         col.push(tc[0], tc[1], tc[2], tc[3]);
       }
@@ -247,7 +248,8 @@ function init() {
       const r = new Array(v, n, m, m, k, v);
       const g = new Array(k, v, v, n, m, m);
       const b = new Array(m, m, k, v, v, n);
-      color.push(r[i], g[i], b[i], a);
+      //color.push(r[i], g[i], b[i], a);
+      color.push(r[i], g[i], b[i], Math.abs(rndm()));
     }
     return color;
   }
