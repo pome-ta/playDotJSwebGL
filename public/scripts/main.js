@@ -34,7 +34,7 @@ function init() {
   attStride[1] = 4;
   
   // トーラスの頂点データを生成
-  const torusData = torus(32, 32, 1.0, 2.0);
+  const torusData = torus(8, 8, 1.0, 2.0);
   const position = torusData[0];
   const color = torusData[1];
   const index = torusData[2];
@@ -87,7 +87,7 @@ function init() {
 
     // モデル座標変換行列の生成
     m.identity(mMatrix);
-    m.rotate(mMatrix, rad, [0, 1, 1], mMatrix);
+    m.rotate(mMatrix, rad, [-0.3, 1, 0.8], mMatrix);
     m.multiply(tmpMatrix, mMatrix, mvpMatrix);
     gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
     //gl.drawElements(gl.TRIANGLES, index.length, gl.UNSIGNED_SHORT, 0);
@@ -189,6 +189,15 @@ function init() {
       gl.vertexAttribPointer(attL[i], attS[i], gl.FLOAT, false, 0, 0);
     }
   }
+  
+  function rndm() {
+    const max = 1
+    const min = -1
+    const value = Math.random() * (max - min) + min;
+    //console.log(value);
+    return value / 10;
+  }
+  
   
   function torus(row, column, irad, orad) {
     const pos = new Array();
